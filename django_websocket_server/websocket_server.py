@@ -9,8 +9,7 @@ import time
 from logging.handlers import RotatingFileHandler
 
 import websockets
-from filter_dict import filter_dict
-from nacl.public import Box, PublicKey
+
 
 from .messagetemplates import commandmessage
 SOCKETPORT = 8888
@@ -37,6 +36,10 @@ class Connection:
         self.sendMsg(commandmessage(sender="server", cmd="indentify"))
 
     def sendMsg(self, msg,encrypted=True):
+        if self.disable_encryption:
+            encrypted = False
+        if encrypted:
+            from nacl.public import Box
         if encrypted and not self.disable_encryption:
             if self.public_key is not None:
                 from django_websocket_server.models import KeyChain
@@ -87,6 +90,8 @@ class Connection:
             self.server.run_cmd(cmd_data)
 
     def identify(self, data):
+        if not self.disable_encryption:
+            from nacl.public import PublicKey
         cmd_data = data["data"]
         try:
             self.name = cmd_data["kwargs"]["name"]
