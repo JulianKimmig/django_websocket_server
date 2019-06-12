@@ -1,16 +1,17 @@
 import setuptools
 
 setup = dict(
-    name="Multi Purpose Arduino Controller",
+    name="Django Websocket Server",
     version="0.1",
     author="Julian Kimmig",
-    author_email="julian-kimmig@gmxREADME.md.net",
-    description="Controll Arduino modules",
+    author_email="julian-kimmig@gmx.net",
+    description="Websocket BAckground Server for Django",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
-    py_modules=["multi_purpose_arduino_controller"],
-    url="https://github.com/JulianKimmig/multi_purpose_arduino_controller",
-    # packages=setuptools.find_packages(),
+    #py_modules=["django_websocket_server"],
+    url="https://github.com/JulianKimmig/django_websocket_server",
+     packages=setuptools.find_packages(),
+    install_requires=["websockets","FilterDict","PyNaCl"],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",

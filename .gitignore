@@ -227,4 +227,4 @@ local.properties
 
 /.idea/
 /upload_to_pypi.py
-/multi_purpose_arduino_controller.iml
+/*.iml

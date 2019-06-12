@@ -39,7 +39,7 @@ class Connection:
     def sendMsg(self, msg,encrypted=True):
         if encrypted and not self.disable_encryption:
             if self.public_key is not None:
-                from serverapps.django_websocket_server.models import KeyChain
+                from django_websocket_server.models import KeyChain
                 private_key = KeyChain.objects.get(id=self.user_id).get_private_key()
                 public_key = self.public_key
 
