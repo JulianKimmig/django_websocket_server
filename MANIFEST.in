@@ -1,2 +1,2 @@
-include django_websocket_server/templates/*
-include django_websocket_server/static/*
+recursive-include django_websocket_server/templates *
+recursive-include django_websocket_server/static *
