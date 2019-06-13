@@ -5,7 +5,16 @@ var wscs={
     ws:null,
     server_key: null,
     RECONNECT_TIME: 10000,
+    reconnect_timer: null,
     websocket_connect(url) {
+        if(this.ws!==null)
+            this.ws.close();
+
+        if(this.reconnect_timer){
+            clearTimeout(this.reconnect_timer);
+            this.reconnect_timer = null;
+        }
+
         this.ws = new WebSocket(url);
         this.ws.onopen = function() {
             for(let i=0;i<this.on_connect_functions.length;i++) {
@@ -33,7 +42,7 @@ var wscs={
 
         this.ws.onclose = function(e) {
             logger.info('Socket is closed. Reconnect will be attempted in '+(this.RECONNECT_TIME/1000.0)+' second.', e.reason);
-            setTimeout(function() {
+            this.reconnect_timer=setTimeout(function() {
                 this.websocket_connect(url);
             }.bind(this), this.RECONNECT_TIME);
         }.bind(this);
@@ -117,7 +126,8 @@ $.getJSON( window.location.protocol + "//" + window.location.host + "/django_web
     if(!data.success)
         return;
     if(data.ws_protocol !== undefined && data.ws_port !== undefined && data.user !== undefined) {
-        wscs.server_key = Uint8Array.from(atob(data.public_key), c => c.charCodeAt(0));
+
+        wscs.server_key = data.public_key === null?null:Uint8Array.from(atob(data.public_key), c => c.charCodeAt(0));
         wscs.websocket_connect(data.ws_protocol+"//"+ window.location.hostname+":"+data.ws_port+"/"+data.user);
     }
 
