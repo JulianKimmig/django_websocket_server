@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 from django.contrib.auth.signals import user_logged_in, user_logged_out
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
-from nacl.public import PrivateKey, Box
 
 
 class KeyChain(models.Model):
@@ -19,6 +18,7 @@ class KeyChain(models.Model):
         return base64.b64encode(bytes(self.get_public_key())).decode("utf-8")
 
     def get_private_key(self):
+        from nacl.public import PrivateKey
         return PrivateKey(base64.b64decode(self.private_key.encode("utf-8")))
 
     def set_private_key(self,key):
@@ -26,11 +26,13 @@ class KeyChain(models.Model):
         self.save()
 
     def refresh(self):
+        from nacl.public import PrivateKey
         key = PrivateKey.generate()
         self.set_private_key(key)
         return key
 
     def decrypt(self,encrypted,public_key):
+        from nacl.public import Box
         key = self.private_key
         box = Box(key, public_key)
         return box.decrypt(encrypted)

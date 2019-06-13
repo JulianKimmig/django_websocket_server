@@ -9,7 +9,7 @@ import time
 from logging.handlers import RotatingFileHandler
 
 import websockets
-
+from filter_dict import filter_dict
 
 from .messagetemplates import commandmessage
 SOCKETPORT = 8888
@@ -96,7 +96,8 @@ class Connection:
         try:
             self.name = cmd_data["kwargs"]["name"]
             print(cmd_data["kwargs"]["public_key"],len(cmd_data["kwargs"]["public_key"]))
-            self.public_key = PublicKey(bytes([int(x) for x in base64.b64decode(cmd_data["kwargs"]["public_key"]).decode('utf-8').split(',')]))
+            if not self.disable_encryption:
+                self.public_key = PublicKey(bytes([int(x) for x in base64.b64decode(cmd_data["kwargs"]["public_key"]).decode('utf-8').split(',')]))
             self.identified = True
             self.sendMsg(
                 commandmessage(sender="server", cmd="set_time", time=self.server.t0)
