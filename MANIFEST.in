@@ -1,0 +1,2 @@
+include django_websocket_server/templates/*
+include django_websocket_server/static/*

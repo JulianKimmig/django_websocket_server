@@ -10,7 +10,8 @@ setup = dict(
     long_description_content_type="text/markdown",
     #py_modules=["django_websocket_server"],
     url="https://github.com/JulianKimmig/django_websocket_server",
-     packages=setuptools.find_packages(),
+    include_package_data=True,
+    packages=setuptools.find_packages(),
     install_requires=["websockets","FilterDict","PyNaCl"],
     classifiers=[
         "Programming Language :: Python :: 3",
